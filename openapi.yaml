@@ -1,0 +1,108 @@
+openapi: 3.0.0
+info:
+  title: Todo API
+  version: "1.0.0"
+  description: Eine einfache API für Todo-Listen
+servers:
+  - url: http://localhost:3000/api
+paths:
+  /todos:
+    get:
+      summary: Liste aller Todos
+      responses:
+        '200':
+          description: Erfolgreiche Antwort
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Todo'
+    post:
+      summary: Ein neues Todo erstellen
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Todo'
+      responses:
+        '201':
+          description: Todo erfolgreich erstellt
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+  /todos/{id}:
+    get:
+      summary: Ein Todo nach ID abrufen
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: Die ID des Todos
+      responses:
+        '200':
+          description: Todo erfolgreich abgerufen
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+        '404':
+          description: Todo nicht gefunden
+    patch:
+      summary: Ein Todo aktualisieren
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: Die ID des Todos
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Todo'
+      responses:
+        '200':
+          description: Todo erfolgreich aktualisiert
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+        '404':
+          description: Todo nicht gefunden
+    delete:
+      summary: Ein Todo löschen
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: Die ID des Todos
+      responses:
+        '204':
+          description: Todo erfolgreich gelöscht
+        '404':
+          description: Todo nicht gefunden
+components:
+  schemas:
+    Todo:
+      type: object
+      required:
+        - title
+      properties:
+        title:
+          type: string
+          description: Der Titel des Todos
+        description:
+          type: string
+          description: Die Beschreibung des Todo
+        completed:
+          type: integer
+          description: Der Status des Todos, ob es erledigt ist oder nicht
